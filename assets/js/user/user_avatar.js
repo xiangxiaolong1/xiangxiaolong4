@@ -24,4 +24,25 @@ $(function () {
     let imgURL = URL.createObjectURL(file)
     $image.cropper('destroy').attr('src', imgURL).cropper(options)
   })
+  $('#btnUpload').on('click', function () {
+    let dataURL = $image.cropper('getCroppedCanvas', {
+      width: 100,
+      height: 100
+    }).toDataURL('image/png')
+    $.ajax({
+      method: "POST",
+      url: "/my/update/avatar",
+      data: {
+        avatar: dataURL
+      },
+      success: function (res) {
+        if (res.status !== 0) {
+          return layer.msg('更换头像失败!')
+        }
+        layer.msg('更换头像成功!')
+        window.parent.getUserInfo()
+      }
+    })
+  })
+
 })
